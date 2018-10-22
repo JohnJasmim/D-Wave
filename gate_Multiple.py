@@ -49,17 +49,19 @@ response = sampler.sample(bqm, num_reads=1000)
 
 # Check how many solutions meet the constraints (are valid)
 valid, invalid, data = 0, 0, []
-for datum in response.data():
-	sample, energy, num = datum
+for sample, energy, num_occurrences in response.data(['sample', 'energy', 'num_occurrences'], sorted_by='num_occurrences'):
+	print(sample, "Energy: ", energy, "Occurrences: ", num_occurrences)
 	if (csp.check(sample)):
-		valid = valid + num
-		for i in range(num):
+		valid = valid + num_occurrences
+		for i in range(num_occurrences):
 			data.append((sample, energy, '1'))
 	else:
-		invalid = invalid + num
-		for i in range(num):
+		invalid = invalid + num_occurrences
+		for i in range(num_occurrences):
 			data.append((sample, energy, '0'))
 print(valid, invalid)
+
+print('################################################################################')
 
 print(next(response.samples()))
 
@@ -68,6 +70,8 @@ plt.ion()
 plt.scatter(range(len(data)), [x[1] for x in data], c=['y' if (x[2] == '1') else 'r' for x in data], marker='.')
 plt.xlabel('Sample')
 plt.ylabel('Energy')
+
+print('################################################################################')
 
 for datum in response.data():
 	print(datum)

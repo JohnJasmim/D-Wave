@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-# coding: utf-8
+# https://cloud.dwavesys.com/learning/
 
 # # Factoring with the D-Wave System
 #

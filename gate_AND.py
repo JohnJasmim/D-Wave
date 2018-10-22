@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+''' ******************** This code takes more than 20 seconds to finish. ******************** '''
+
 # https://docs.ocean.dwavesys.com/en/latest/examples/and.html
 # http://www.ee.surrey.ac.uk/Projects/CAL/digital-logic/gatesfunc/
 
