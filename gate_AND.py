@@ -18,7 +18,7 @@ r''' Representing the Problem With a Penalty Function
 	Often it is convenient to format the coefficients as an upper-triangular matrix:
 				x1		 x2	 z
 			|	0		 1		-2	|	x1
-	Q =	|	0		 0		-2	|	x2
+	Q	=	|	0		 0		-2	|	x2
 			|	0		 0		 3	|	z
 '''
 
