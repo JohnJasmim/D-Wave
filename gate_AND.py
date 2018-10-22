@@ -28,7 +28,6 @@ def run(sampler_embedded, Q, chain_strength=1.0):
 	response = sampler_embedded.sample_qubo(Q, num_reads=num_reads, chain_strength=chain_strength)
 	for sample, energy, num_occurrences in response.data(['sample', 'energy', 'num_occurrences'], sorted_by='num_occurrences'):
 		print(sample, "Energy: ", energy, "Occurrences: ", num_occurrences)
-	print('################################################################################')
 
 
 from dwave.system.samplers import DWaveSampler
@@ -39,7 +38,7 @@ sampler_embedded = EmbeddingComposite(sampler)
 print('Q_and - EmbeddingComposite', sampler.adjacency[sampler.nodelist[0]])
 run(sampler_embedded, Q_and)
 
-################################################################################
+print('################################################################################')
 
 from dwave.system.composites import FixedEmbeddingComposite
 embedding = {'x': [0], 'z': [4]}
@@ -47,20 +46,21 @@ sampler_embedded = FixedEmbeddingComposite(sampler, embedding) # manually minor-
 print('Q_not - FixedEmbeddingComposite manually', sampler_embedded.adjacency)
 run(sampler_embedded, Q_not)
 
-################################################################################
+print('################################################################################')
 
 embedding = {'x1': {1}, 'x2': {5}, 'z': {0, 4}}
 sampler_embedded = FixedEmbeddingComposite(sampler, embedding) # manual minor-embedding the AND problem
 print('Q_and - FixedEmbeddingComposite manually', sampler_embedded.adjacency)
 run(sampler_embedded, Q_and)
 
-################################################################################
+print('################################################################################')
 
 print('Q_and - chain_strength', sampler.properties['extended_j_range']) # prints the range of values available for the D-Wave system
 run(sampler_embedded, Q_and, chain_strength=0.25)
 
-################################################################################
-''' FIXME:BUG - VirtualGraphComposite consumes several seconds, use instead FixedEmbeddingComposite
+print('################################################################################')
+
+''' FIXME: BUG - VirtualGraphComposite consumes several seconds, use instead FixedEmbeddingComposite
 from dwave.system.composites import VirtualGraphComposite
 embedding = {'x1': {1}, 'x2': {5}, 'z': {0, 4}}
 sampler_embedded = VirtualGraphComposite(sampler, embedding)
@@ -68,17 +68,16 @@ sampler_embedded = VirtualGraphComposite(sampler, embedding)
 print('Q_and - VirtualGraphComposite', sampler_embedded.adjacency)
 run(sampler_embedded, Q_and)
 
-################################################################################
+print('################################################################################')
 
 print(sampler.properties['extended_j_range']) # prints the range of values available for the D-Wave system
 sampler_embedded = VirtualGraphComposite(sampler, embedding, chain_strength=0.1) # weakens the chain strength (strength of the coupler between qubits 0 and 4, which represents variable z)
 # By setting it to a low value of 0.1, the two qubits are not strongly correlated and the result is that many returned samples represent invalid states for an AND gate.
 run(sampler_embedded, Q_and)
 '''
-################################################################################
 
 
-'''
+''' OUTPUT
 num_reads=5000 = 3.310 seconds | "Problem IDs" = 4
 
 Q_and - EmbeddingComposite {128, 4, 5, 6, 7}
