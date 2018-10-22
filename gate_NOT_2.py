@@ -33,15 +33,13 @@ for sample, energy, num_occurrences in response.data(['sample', 'energy', 'num_o
 print('################################################################################')
 
 from dwave.system.composites import FixedEmbeddingComposite
-''' ***** ERROR *****
 sampler_embedded = FixedEmbeddingComposite(sampler, {'x': [0], 'z': [4]}) # manually minor-embed the problem
-# sampler = FixedEmbeddingComposite(DWaveSampler(), {'a': [0, 4], 'b': [1, 5], 'c': [2, 6]})
 
 print(sampler_embedded.adjacency)
 response = sampler_embedded.sample_qubo(Q, num_reads=50)
 for sample, energy, num_occurrences in response.data(['sample', 'energy', 'num_occurrences'], sorted_by='num_occurrences'):
 	print(sample, "Energy: ", energy, "Occurrences: ", num_occurrences)
-'''
+
 
 '''
 {'x': 0, 'z': 0} Energy:  0.0 Occurrences:  2
