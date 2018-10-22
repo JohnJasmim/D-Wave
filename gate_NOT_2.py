@@ -23,6 +23,7 @@ from dwave.system.composites import EmbeddingComposite
 sampler = DWaveSampler()
 sampler_embedded = EmbeddingComposite(sampler)
 
+# https://docs.ocean.dwavesys.com/en/latest/examples/and.html#minor-embedding-a-not-gate
 Q = {('x', 'x'): -1, ('x', 'z'): 2, ('z', 'x'): 0, ('z', 'z'): -1} # Matrix Q - Row * Column
 
 print(sampler.adjacency[sampler.nodelist[0]])
