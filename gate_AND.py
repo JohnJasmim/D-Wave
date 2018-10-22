@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-''' ******************** This code takes more than 20 seconds to finish. ******************** '''
-
 # https://docs.ocean.dwavesys.com/en/latest/examples/and.html
 # http://www.ee.surrey.ac.uk/Projects/CAL/digital-logic/gatesfunc/
 
@@ -37,7 +35,6 @@ from dwave.system.composites import EmbeddingComposite
 sampler = DWaveSampler()
 
 sampler_embedded = EmbeddingComposite(sampler)
-
 print('Q_and - EmbeddingComposite', sampler.adjacency[sampler.nodelist[0]])
 run(sampler_embedded, Q_and)
 
@@ -46,7 +43,6 @@ run(sampler_embedded, Q_and)
 from dwave.system.composites import FixedEmbeddingComposite
 embedding = {'x': [0], 'z': [4]}
 sampler_embedded = FixedEmbeddingComposite(sampler, embedding) # manually minor-embed the NOT problem
-
 print('Q_not - FixedEmbeddingComposite manually', sampler_embedded.adjacency)
 run(sampler_embedded, Q_not)
 
@@ -54,7 +50,6 @@ run(sampler_embedded, Q_not)
 
 embedding = {'x1': {1}, 'x2': {5}, 'z': {0, 4}}
 sampler_embedded = FixedEmbeddingComposite(sampler, embedding) # manual minor-embedding the AND problem
-
 print('Q_and - FixedEmbeddingComposite manually', sampler_embedded.adjacency)
 run(sampler_embedded, Q_and)
 
@@ -64,7 +59,6 @@ print('Q_and - chain_strength', sampler.properties['extended_j_range']) # prints
 run(sampler_embedded, Q_and, chain_strength=0.25)
 
 ################################################################################
-
 ''' BUG - VirtualGraphComposite consumes several seconds, use instead FixedEmbeddingComposite
 from dwave.system.composites import VirtualGraphComposite
 embedding = {'x1': {1}, 'x2': {5}, 'z': {0, 4}}
@@ -80,7 +74,6 @@ sampler_embedded = VirtualGraphComposite(sampler, embedding, chain_strength=0.1)
 # By setting it to a low value of 0.1, the two qubits are not strongly correlated and the result is that many returned samples represent invalid states for an AND gate.
 run(sampler_embedded, Q_and)
 '''
-
 ################################################################################
 
 
