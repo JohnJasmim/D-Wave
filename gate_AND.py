@@ -3,6 +3,7 @@
 
 # https://docs.ocean.dwavesys.com/en/latest/examples/and.html
 # http://www.ee.surrey.ac.uk/Projects/CAL/digital-logic/gatesfunc/
+# https://en.wikipedia.org/wiki/AND_gate
 
 r'''
 Representing the Problem With a Penalty Function: x1x2 -2(x1+x2)z +3z
@@ -59,7 +60,7 @@ print('Q_and - chain_strength', sampler.properties['extended_j_range']) # prints
 run(sampler_embedded, Q_and, chain_strength=0.25)
 
 ################################################################################
-''' BUG - VirtualGraphComposite consumes several seconds, use instead FixedEmbeddingComposite
+''' FIXME:BUG - VirtualGraphComposite consumes several seconds, use instead FixedEmbeddingComposite
 from dwave.system.composites import VirtualGraphComposite
 embedding = {'x1': {1}, 'x2': {5}, 'z': {0, 4}}
 sampler_embedded = VirtualGraphComposite(sampler, embedding)
