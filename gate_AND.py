@@ -6,25 +6,23 @@
 # https://docs.ocean.dwavesys.com/en/latest/examples/and.html
 # http://www.ee.surrey.ac.uk/Projects/CAL/digital-logic/gatesfunc/
 
-r''' Representing the Problem With a Penalty Function
-	x1x2−2(x1+x2)z+3z
+r'''
+Representing the Problem With a Penalty Function: x1x2 -2(x1+x2)z +3z
 
-	QUBO formulation:
+QUBO formulation: E(qi,qi,j;xi) = 3x3 +x1x2 -2x1x3 -2x2x3
 
-	E(qi,qi,j;xi)=3x3+x1x2−2x1x3−2x2x3
+where z=x3 is the AND gate's output, x1,x2 the inputs, linear coefficients are q1=3, and quadratic coefficients are q1,2=1, q1,3=-2, q2,3=-2
 
-	where z=x3 is the AND gate’s output, x1,x2 the inputs, linear coefficients are q1=3, and quadratic coefficients are q1,2=1,q1,3=−2,q2,3=−2
-
-	Often it is convenient to format the coefficients as an upper-triangular matrix:
-				x1		 x2	 z
-			|	0		 1		-2	|	x1
-	Q	=	|	0		 0		-2	|	x2
-			|	0		 0		 3	|	z
+Often it is convenient to format the coefficients as an upper-triangular matrix:
+			x1		x2		z
+		|	0		1		-2	|	x1
+Q	=	|	0		0		-2	|	x2
+		|	0		0		3	|	z
 '''
 
 Q_and = {('x1', 'x2'): 1, ('x1', 'z'): -2, ('x2', 'z'): -2, ('z', 'z'): 3} # gate AND # Matrix Q - Row * Column
 Q_not = {('x', 'x'): -1, ('x', 'z'): 2, ('z', 'x'): 0, ('z', 'z'): -1} # gate NOT
-num_reads = 50
+num_reads = 100
 
 
 def run(sampler_embedded, Q, chain_strength=1.0):
@@ -119,6 +117,35 @@ Q_and - chain_strength [-2.0, 1.0]
 {'z': 0, 'x1': 0, 'x2': 0} Energy:  0.0 Occurrences:  1014
 {'z': 0, 'x1': 0, 'x2': 1} Energy:  0.0 Occurrences:  1024
 ################################################################################
+
+
+num_reads=100 = 0.096 seconds | "Problem IDs" = 4
+
+Q_and - EmbeddingComposite {128, 4, 5, 6, 7}
+{'z': 0, 'x1': 0, 'x2': 0} Energy:  0.0 Occurrences:  19
+{'z': 1, 'x1': 1, 'x2': 1} Energy:  0.0 Occurrences:  23
+{'z': 0, 'x1': 1, 'x2': 0} Energy:  0.0 Occurrences:  24
+{'z': 0, 'x1': 0, 'x2': 1} Energy:  0.0 Occurrences:  34
+################################################################################
+Q_not - FixedEmbeddingComposite manually {'x': {'z'}, 'z': {'x'}}
+{'x': 1, 'z': 0} Energy:  -1.0 Occurrences:  29
+{'x': 0, 'z': 1} Energy:  -1.0 Occurrences:  71
+################################################################################
+Q_and - FixedEmbeddingComposite manually {'x1': {'x2', 'z'}, 'x2': {'x1', 'z'}, 'z': {'x1', 'x2'}}
+{'z': 0, 'x1': 0, 'x2': 1} Energy:  0.0 Occurrences:  19
+{'z': 1, 'x1': 1, 'x2': 1} Energy:  0.0 Occurrences:  19
+{'z': 0, 'x1': 0, 'x2': 0} Energy:  0.0 Occurrences:  25
+{'z': 0, 'x1': 1, 'x2': 0} Energy:  0.0 Occurrences:  37
+################################################################################
+Q_and - chain_strength [-2.0, 1.0]
+{'z': 0, 'x1': 1, 'x2': 0} Energy:  0.0 Occurrences:  9
+{'z': 1, 'x1': 1, 'x2': 0} Energy:  1.0 Occurrences:  9
+{'z': 1, 'x1': 1, 'x2': 1} Energy:  0.0 Occurrences:  13
+{'z': 0, 'x1': 0, 'x2': 0} Energy:  0.0 Occurrences:  18
+{'z': 0, 'x1': 0, 'x2': 1} Energy:  0.0 Occurrences:  21
+{'z': 1, 'x1': 0, 'x2': 1} Energy:  1.0 Occurrences:  30
+################################################################################
+
 
 $ pip list | grep dwave
 dwave-cloud-client           0.4.15
