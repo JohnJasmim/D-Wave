@@ -42,8 +42,14 @@ for sample, energy, num_occurrences in response.data(['sample', 'energy', 'num_o
 
 
 '''
+{128, 4, 5, 6, 7}
 {'x': 0, 'z': 0} Energy:  0.0 Occurrences:  2
-{'x': 1, 'z': 1} Energy:  0.0 Occurrences:  2
-{'x': 0, 'z': 1} Energy:  -1.0 Occurrences:  1924
-{'x': 1, 'z': 0} Energy:  -1.0 Occurrences:  3072
+{'x': 0, 'z': 1} Energy:  -1.0 Occurrences:  2355
+{'x': 1, 'z': 0} Energy:  -1.0 Occurrences:  2643
+################################################################################
+{'x': {'z'}, 'z': {'x'}}
+{'x': 0, 'z': 0} Energy:  0.0 Occurrences:  1
+{'x': 1, 'z': 1} Energy:  0.0 Occurrences:  1
+{'x': 1, 'z': 0} Energy:  -1.0 Occurrences:  1753
+{'x': 0, 'z': 1} Energy:  -1.0 Occurrences:  3245
 '''
