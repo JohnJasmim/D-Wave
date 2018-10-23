@@ -13,7 +13,12 @@ and_csp = dbc.ConstraintSatisfactionProblem('BINARY')
 and_csp.add_constraint(and_gate)
 
 # Convert the CSP into BQM and_bqm
-and_bqm = dbc.stitch(and_csp)
+''' FIXME: BUG:
+File "/usr/lib/python3.7/site-packages/dimod/decorators.py", line 156, in _enforce_single_arg
+	raise TypeError(("expected input vartype to be one of: "
+TypeError: expected input vartype to be one of: Vartype.SPIN, 'SPIN', {-1, 1}, Vartype.BINARY, 'BINARY', or {0, 1}.
+'''
+and_bqm = dbc.stitch(and_csp) # FIXME: BUG after 'dimod-0.7.8'
 and_bqm.remove_offset()
 
 P = 21 # Set an integer to factor
@@ -133,4 +138,5 @@ dwave-ocean-sdk              1.0.1
 dwave-qbsolv                 0.2.9
 dwave-system                 0.5.4
 dwavebinarycsp               0.0.6
+dimod                        0.7.7
 '''
