@@ -233,7 +233,7 @@ draw.circuit_from(bqm)
 p_vars = ['p0', 'p1', 'p2', 'p3', 'p4', 'p5']
 
 # Convert P from decimal to binary
-fixed_variables = dict(zip(reversed(p_vars), "{:06b}".format(P)))
+fixed_variables = dict(zip(reversed(p_vars), "{:06b}".format(P))) # {'p5': '0', 'p4': '1', 'p3': '0', 'p2': '1', 'p1': '0', 'p0': '1'}
 fixed_variables = {var: int(x) for(var, x) in fixed_variables.items()}
 
 # Fix product variables
@@ -256,8 +256,8 @@ print("Variable a0 in BQM: ", 'a0' in bqm)
 # In[ ]:
 
 
-from helpers.solvers import default_solver
-my_solver, my_token = default_solver()
+# from helpers.solvers import default_solver
+# my_solver, my_token = default_solver()
 
 
 # In[ ]:
@@ -275,7 +275,8 @@ my_solver, my_token = default_solver()
 
 from dwave.system.samplers import DWaveSampler
 # Use a D-Wave system as the sampler
-sampler = DWaveSampler(solver=my_solver, token=my_token)
+sampler = DWaveSampler()
+# sampler = DWaveSampler(solver=my_solver, token=my_token)
 _, target_edgelist, target_adjacency = sampler.structure
 
 
@@ -294,8 +295,8 @@ embedding = embeddings[sampler.solver.id]
 bqm_embedded = dimod.embed_bqm(bqm, embedding, target_adjacency, 3.0)
 
 # Confirm mapping of variables from a0, b0, etc to indexed qubits
-print("Variable a0 in embedded BQM: ", 'a0' in bqm_embedded)
-print("First five nodes in QPU graph: ", sampler.structure.nodelist[:5])
+print("Variable a0 in embedded BQM: ", 'a0' in bqm_embedded) # False
+print("First five nodes in QPU graph: ", sampler.structure.nodelist[:5]) # [0, 1, 2, 3, 4]
 
 
 # When the D‑Wave quantum computer solves a problem, it uses quantum phenomena such as superposition and tunneling to explore all possible solutions simultaneously and find a set of the best ones. Because the sampled solution is probabilistic, returned solutions may differ between runs. Typically, when submitting a problem to the system, we ask for many samples, not just one. This way, we see multiple “best” answers and reduce the probability of settling on a suboptimal answer.
@@ -313,11 +314,12 @@ if 'answer_mode' in sampler.parameters:
 	kwargs['answer_mode'] = 'histogram'
 response = sampler.sample(bqm_embedded, **kwargs)
 print("A solution indexed by qubits: \n", next(response.data(fields=['sample'])))
+# Sample(sample={1481: 0, 1482: 0, 1483: 1, 1484: 1, 1485: 0, 1487: 0, 1488: 0, 1489: 0, 1490: 0, 1491: 1, 1492: 1, 1493: 0, 1494: 1, 1495: 0, 1501: 0, 1506: 0, 1509: 0, 1608: 1, 1609: 1, 1610: 0, 1611: 1, 1612: 1, 1614: 1, 1615: 1, 1616: 1, 1617: 0, 1618: 0, 1619: 1, 1620: 1, 1621: 0, 1622: 1, 1623: 1, 1624: 1, 1625: 1, 1626: 1, 1627: 1, 1628: 1, 1629: 0, 1630: 1, 1631: 1, 1632: 1, 1634: 0, 1637: 0, 1638: 1, 1736: 1, 1737: 1, 1738: 0, 1739: 0, 1740: 0, 1741: 0, 1742: 1, 1743: 1, 1744: 1, 1745: 0, 1747: 1, 1748: 0, 1750: 1, 1751: 1, 1752: 1, 1753: 1, 1754: 1, 1755: 1, 1756: 0, 1757: 1, 1758: 1, 1759: 1, 1760: 1, 1864: 1, 1871: 1, 1879: 1, 1887: 1, 1888: 1, 1895: 1})
 
 # Map back to the BQM's graph (nodes labeled "a0", "b0" etc,)
 response = dimod.unembed_response(response, embedding, source_bqm=bqm)
 print("\nThe solution in problem variables: \n", next(response.data(fields=['sample'])))
-
+# Sample(sample={'a0': 1, 'b0': 1, 'and0,1': 1, 'b1': 1, 'and0,2': 1, 'b2': 1, 'a1': 1, 'and1,0': 1, 'carry1,0': 1, 'and1,1': 1, 'carry1,1': 1, 'sum1,1': 0, 'and1,2': 1, 'a2': 0, 'and2,0': 0, 'carry2,0': 0, 'and2,1': 0, 'carry2,1': 1, 'sum2,1': 0, 'and2,2': 0, 'carry3,0': 0})
 
 # ### Viewing the Solution
 # We need to convert back from binary numbers to integers. Because quantum computing is probabilistic, there is a slight chance that in many executions of this example, your execution might return an incorrect example. Rerunning the previous cell will most likely produce a correct answer.
@@ -403,13 +405,13 @@ print("Given integer P={}, found factors a={} and b={}".format(P, a, b))
 # The next cell views the energy of the samples, using a `dict` mapping pairs `(a, b)` to information about them.
 
 # In[ ]:
-
+'''
 
 from collections import OrderedDict
 
 
 def response_to_dict(response):
-	''' Function for converting the response to a dict of integer values '''
+	""" Function for converting the response to a dict of integer values """
 	results_dict = OrderedDict()
 	for sample, energy in response.data(['sample', 'energy']):
 		# Convert A and B from binary to decimal
@@ -474,3 +476,4 @@ results
 
 
 draw.energy_of(results)
+'''
