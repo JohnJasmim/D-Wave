@@ -60,7 +60,6 @@ from helpers.convert import to_base_ten
 ''' FIXME: ERROR:
 File "/usr/lib/python3.7/site-packages/dimod/sampleset.py", line 517, in samples
 	for sample in itertools.islice(self.samples(n=None, sorted_by=sorted_by), n):
-
 NameError: name 'itertools' is not defined
 '''
 sample = next(response.samples(n=1)) # Select just just the first sample. # FIXME: BUG: 'next()'
