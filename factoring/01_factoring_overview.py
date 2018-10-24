@@ -198,7 +198,7 @@ print(bP)
 
 csp = dbc.factories.multiplication_circuit(3)
 # Print one of the CSP's constraints, the gates that constitute 3-bit binary multiplication
-print(next(iter(csp.constraints)))
+print(next(iter(csp.constraints))) # Constraint.from_configurations(frozenset({(1, 0, 0), (1, 1, 1), (0, 1, 0), (0, 0, 0)}), ('a0', 'b0', 'p0'), Vartype.BINARY, name='AND(a0, b0) = p0')
 
 
 # ## Step 2: Convert to a BQM
@@ -211,7 +211,7 @@ print(next(iter(csp.constraints)))
 # Convert the CSP into BQM bqm
 bqm = dbc.stitch(csp, min_classical_gap=.1)
 # Print a sample coefficient (one of the programable inputs to a D-Wave system)
-print("p0: ", bqm.linear['p0'])
+print("p0: ", bqm.linear['p0']) # p0:  6.0
 
 
 # Running the next cell just creates a nice visualization of the BQM. Each node of the graph represents a variable; these include P and its factors as binary numbers, and some internal variables of the multiplication circuit.
@@ -334,7 +334,7 @@ dict(sample)
 a, b = to_base_ten(sample)
 
 print("Given integer P={}, found factors a={} and b={}".format(P, a, b))
-
+# Given integer P=21, found factors a=7 and b=3
 
 # # Summary
 
@@ -405,7 +405,7 @@ print("Given integer P={}, found factors a={} and b={}".format(P, a, b))
 # The next cell views the energy of the samples, using a `dict` mapping pairs `(a, b)` to information about them.
 
 # In[ ]:
-'''
+
 
 from collections import OrderedDict
 
@@ -413,7 +413,8 @@ from collections import OrderedDict
 def response_to_dict(response):
 	""" Function for converting the response to a dict of integer values """
 	results_dict = OrderedDict()
-	for sample, energy in response.data(['sample', 'energy']):
+	for sample, energy, num_occurrences in response.data(['sample', 'energy', 'num_occurrences']):
+		# print(sample, "Energy: ", energy, "Occurrences: ", num_occurrences)
 		# Convert A and B from binary to decimal
 		a, b = to_base_ten(sample)
 		# Aggregate results by unique A and B values (ignoring internal circuit variables)
@@ -425,7 +426,7 @@ def response_to_dict(response):
 
 # Convert the dimod.Response object to a dict and display it
 results = response_to_dict(response)
-results
+print(results) # OrderedDict([((7, 3), 0.0), ((3, 7), 0.0), ((5, 1), 1.0), ((1, 5), 1.0), ((5, 5), 1.0), ((7, 1), 2.0), ((5, 4), 2.0), ((7, 5), 3.0), ((7, 7), 3.0), ((0, 3), 4.0), ((7, 2), 4.0), ((1, 7), 5.0), ((4, 3), 5.0), ((0, 5), 6.0), ((7, 6), 7.0), ((7, 0), 7.0), ((5, 7), 8.0)])
 
 
 # We can create a scatter plot of the samples and their energies, showing that the lowest energy states correspond to correct answers.
@@ -467,7 +468,7 @@ response = dimod.unembed_response(response, embedding, source_bqm=bqm)
 
 
 results = response_to_dict(response)
-results
+print(results) # OrderedDict([((7, 3), 0.0), ((3, 7), 0.0), ((5, 5), 1.0), ((1, 5), 2.0), ((7, 5), 2.0), ((5, 3), 2.0), ((3, 1), 2.0), ((3, 3), 2.0), ((3, 5), 2.0), ((1, 7), 3.0), ((5, 7), 3.0), ((7, 1), 3.0), ((7, 7), 3.0), ((2, 7), 4.0), ((4, 3), 4.0), ((5, 1), 4.0), ((3, 6), 6.0), ((2, 5), 6.0), ((6, 5), 9.0), ((3, 2), 10.0), ((7, 2), 12.0)])
 
 
 # Create a scatter plot of the samples and their energies.
@@ -476,4 +477,3 @@ results
 
 
 draw.energy_of(results)
-'''

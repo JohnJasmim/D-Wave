@@ -4,8 +4,6 @@
 # https://cloud.dwavesys.com/learning/hub/home
 # Notebook: Factoring
 
-import itertools # imported but unused
-
 import dwavebinarycsp as dbc
 # Add an AND gate as a constraint to CSP and_csp defined for binary variables
 and_gate = dbc.factories.and_gate(["x1", "x2", "x3"])
@@ -13,11 +11,6 @@ and_csp = dbc.ConstraintSatisfactionProblem('BINARY')
 and_csp.add_constraint(and_gate)
 
 # Convert the CSP into BQM and_bqm
-''' FIXME: BUG:
-File "/usr/lib/python3.7/site-packages/dimod/decorators.py", line 156, in _enforce_single_arg
-	raise TypeError(("expected input vartype to be one of: "
-TypeError: expected input vartype to be one of: Vartype.SPIN, 'SPIN', {-1, 1}, Vartype.BINARY, 'BINARY', or {0, 1}.
-'''
 and_bqm = dbc.stitch(and_csp) # FIXME: BUG after 'dimod-0.7.8'
 and_bqm.remove_offset()
 
@@ -62,17 +55,12 @@ print("\nThe solution in problem variables: \n", next(response.data(fields=['sam
 from helpers.convert import to_base_ten
 
 # print(response.samples) # see below
-''' FIXME: ERROR:
-File "/usr/lib/python3.7/site-packages/dimod/sampleset.py", line 517, in samples
-	for sample in itertools.islice(self.samples(n=None, sorted_by=sorted_by), n):
-NameError: name 'itertools' is not defined
-'''
 sample = next(response.samples(n=1)) # Select just just the first sample. # FIXME: BUG: 'next()'
+# Given integer P=21, found factors a=7 and b=3
 
 dict(sample)
 a, b = to_base_ten(sample)
 
-# TODO: Expected: Given integer P=21, found factors a=7 and b=3
 print("Given integer P={}, found factors a={} and b={}".format(P, a, b))
 
 ''' OUTPUT
@@ -121,22 +109,4 @@ The solution in problem variables:
 	([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0], 6.,  1),
 	([1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1], 9.,  1)],
 		dtype=[('sample', 'i1', (21,)), ('energy', '<f8'), ('num_occurrences', '<i8')]), ['a0', 'b0', 'and0,1', 'b1', 'and0,2', 'b2', 'a1', 'and1,0', 'carry1,0', 'and1,1', 'carry1,1', 'sum1,1', 'and1,2', 'a2', 'and2,0', 'carry2,0', 'and2,1', 'carry2,1', 'sum2,1', 'and2,2', 'carry3,0'], {'timing': {'total_real_time': 15962, 'qpu_access_overhead_time': 1939, 'anneal_time_per_run': 20, 'post_processing_overhead_time': 408, 'qpu_sampling_time': 8198, 'readout_time_per_run': 123, 'qpu_delay_time_per_sample': 21, 'qpu_anneal_time_per_sample': 20, 'total_post_processing_time': 408, 'qpu_programming_time': 7764, 'run_time_chip': 8198, 'qpu_access_time': 15962, 'qpu_readout_time_per_sample': 123}}, 'BINARY')>
-'''
-
-''' print(response.samples(n=1))
-<generator object SampleSet.samples at 0x7f222021a570>
-'''
-
-'''
-OS: Archlinux Kernel: x86_64 Linux 4.14.72-1-lts
-Python version: 3.7.0
-dwave-cloud-client           0.4.15
-dwave-drivers                0.4.1
-dwave-neal                   0.4.2
-dwave-networkx               0.6.6
-dwave-ocean-sdk              1.0.1
-dwave-qbsolv                 0.2.9
-dwave-system                 0.5.4
-dwavebinarycsp               0.0.6
-dimod                        0.7.7
 '''
