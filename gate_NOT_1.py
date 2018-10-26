@@ -3,6 +3,11 @@
 
 # https://docs.ocean.dwavesys.com/en/latest/overview/solving_problems.html
 
+'''
+-x1 -x2 +2x1x2
+lower values for valid states of the NOT gate (e.g., x1=0,x2=1) and higher for invalid states (e.g., x1=0,x2=0).
+'''
+
 import dwavebinarycsp
 import dwavebinarycsp.factories.constraint.gates as gates
 csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)

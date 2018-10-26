@@ -5,17 +5,17 @@
 # http://www.ee.surrey.ac.uk/Projects/CAL/digital-logic/gatesfunc/
 
 r''' Representing the Problem With a Penalty Function
-	2xz -x -z +1
-	state x,z=0,1 -> 2xz -x -z +1 = 2*0*1 -0 -1 +1 = -1+1 = 0
-	state x,z=0,0 -> 2xz -x -z +1 = 2*0*0 -0 -0 +1 = 1
+2xz -x -z +1
+state x,z=0,1 -> 2xz -x -z +1 = 2*0*1 -0 -1 +1 = -1+1 = 0
+state x,z=0,0 -> 2xz -x -z +1 = 2*0*0 -0 -0 +1 = 1
 
-	QUBO formulation:
-	-x1 -x2 +2x1x2
-	where z=x2 is the NOT gate's output, x=x1 the input, linear coefficients are q1=q2=-1, and quadratic coefficient is q1,2=2
-		Often it is convenient to format the coefficients as an upper-triangular matrix:
-				 x		z
-	Q =	| -1   2 |	x
-			|  0  -1 |	z
+QUBO formulation:
+-x1 -x2 +2x1x2
+where z=x2 is the NOT gate's output, x=x1 the input, linear coefficients are q1=q2=-1, and quadratic coefficient is q1,2=2
+	Often it is convenient to format the coefficients as an upper-triangular matrix:
+			x		z
+Q	=	|	-1		2	|	x
+		|	0		-1	|	z
 '''
 
 from dwave.system.samplers import DWaveSampler
