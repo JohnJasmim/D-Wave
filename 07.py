@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # https://support.dwavesys.com/hc/en-us/articles/360003718693-Define-a-Simple-Problem-and-Submit-it-to-the-QPU-Ising-Example-
+# https://support.dwavesys.com/hc/en-us/articles/360003718733-View-Results-Problem-Solution-
 
 from dwave.system.samplers import DWaveSampler
 solver = DWaveSampler() # Access the solver
@@ -33,7 +34,7 @@ print('Solution:', solution)
 
 print('\nsamples in dict format\n' + str(list(solution.samples())))
 
-print('\nsamples in matrix format\n' + str(list(solution.samples_matrix)))
+# print('\nsamples in matrix format\n' + str(list(solution.samples_matrix))) # AttributeError: 'SampleSet' object has no attribute 'samples_matrix'
 
 print('\nenergies of samples\n' + str(list(solution.data_vectors)))
 
