@@ -1,30 +1,30 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# https://support.dwavesys.com/hc/en-us/community/posts/360016737274-Save-time-Reuse-your-embedding-when-possible
+# https://support.dwavesys.com/hc/en-us/community/posts/360029545074-Displaying-Embedding-Generated-by-EmbeddingComposite
 
-import dwavebinarycsp as dbc 
-import dwavebinarycsp.factories.constraint.gates as gates 
-from dwave.system.composites import FixedEmbeddingComposite, EmbeddingComposite 
-from dwave.system.samplers import DWaveSampler 
+from dimod import BinaryQuadraticModel
+from dwave.embedding import embed_bqm, unembed_sampleset
+from dwave.system.samplers import DWaveSampler
+from minorminer import find_embedding
+from dwave.embedding.chain_breaks import majority_vote
+from dwave.embedding.chain_breaks import MinimizeEnergy
 
-# Making two different BQMs (think: energy functions or optimization functions) 
-csp1 = dbc.ConstraintSatisfactionProblem(dbc.BINARY) 
-csp1.add_constraint(gates.and_gate(['a','b','c'])) 
-bqm1 = dbc.stitch(csp1) 
+solver = DWaveSampler()
 
-csp2 = dbc.ConstraintSatisfactionProblem(dbc.BINARY) 
-csp2.add_constraint(gates.or_gate(['a','b','c'])) 
-bqm2 = dbc.stitch(csp2) 
+__, target_edgelist, target_adjacency = solver.structure
 
-# Using Embedding Composite 
-sampler = EmbeddingComposite(DWaveSampler()) 
-sampler.sample(bqm1) # Gets a new embedding for bqm1 
-sampler.sample(bqm2) # Gets a new embedding for bqm2 
+Q = {(0,1):1}
 
-# Using Fixed Embedding Composite 
-# Note: bqm1 and bqm2 can both be represented by the same graph - triangle graph. 
-embedding = {'a':[0,4],'b':[1],'c':[5]} # Embedding the triangle graph using QPU indices
-fixedSampler = FixedEmbeddingComposite(DWaveSampler(), embedding) 
-fixedSampler.sample(bqm1) 
-fixedSampler.sample(bqm2) # in both samples, the SAME embedding gets used
+bqm = BinaryQuadraticModel.from_qubo(Q)
+
+emb = find_embedding(Q, target_edgelist)
+
+embedded_bqm = embed_bqm(bqm, emb, target_adjacency)
+
+result = solver.sample(embedded_bqm, num_reads=1)
+
+# unembedded = unembed_sampleset(result, emb, bqm, chain_break_method=majority_vote(bqm, emb))
+unembedded = unembed_sampleset(result, emb, bqm, MinimizeEnergy(bqm, emb))
+
+print(unembedded)
